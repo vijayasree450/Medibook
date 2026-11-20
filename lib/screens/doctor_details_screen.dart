@@ -16,11 +16,16 @@ class DoctorDetailsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Center(
+            Center(
               child: CircleAvatar(
                 radius: 55,
-                backgroundColor: Color(0xFFEAE3FF),
-                child: Icon(Icons.person, size: 65, color: Color(0xFF7655D9)),
+                backgroundColor: const Color(0xFFEAE3FF),
+                backgroundImage: doctor.imagePath.isNotEmpty
+                    ? AssetImage(doctor.imagePath)
+                    : null,
+                child: doctor.imagePath.isEmpty
+                    ? const Icon(Icons.person, size: 65, color: Color(0xFF7655D9))
+                    : null,
               ),
             ),
             const SizedBox(height: 20),

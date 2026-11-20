@@ -5,6 +5,7 @@ class Doctor {
   final String experience;
   final String rating;
   final String description;
+  final String imagePath;
 
   Doctor({
     required this.id,
@@ -13,6 +14,7 @@ class Doctor {
     required this.experience,
     required this.rating,
     required this.description,
+    required this.imagePath,
   });
 }
 
@@ -24,6 +26,7 @@ final List<Doctor> doctors = [
     experience: '8 years',
     rating: '4.9',
     description: 'Experienced heart specialist.',
+    imagePath: 'assets/images/doctor1.jpg',
   ),
   Doctor(
     id: '2',
@@ -32,6 +35,7 @@ final List<Doctor> doctors = [
     experience: '6 years',
     rating: '4.8',
     description: 'Professional dental care specialist.',
+    imagePath: 'assets/images/doctor2.jpg',
   ),
   Doctor(
     id: '3',
@@ -40,5 +44,6 @@ final List<Doctor> doctors = [
     experience: '5 years',
     rating: '4.7',
     description: 'Skin care and treatment specialist.',
+    imagePath: 'assets/images/doctor3.jpg',
   ),
 ];

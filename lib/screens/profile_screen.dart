@@ -13,10 +13,13 @@ class ProfileScreen extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            const CircleAvatar(
-              radius: 50,
-              backgroundColor: Color(0xFFEAE3FF),
-              child: Icon(Icons.person, size: 60, color: Color(0xFF7655D9)),
+            CircleAvatar(
+              radius: 55,
+              backgroundColor: const Color(0xFFEAE3FF),
+              backgroundImage: const AssetImage(
+                'assets/images/user_profile.png',
+              ),
+              onBackgroundImageError: (_, __) {},
             ),
             const SizedBox(height: 15),
             const Text(
