@@ -62,6 +62,62 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
     }
   }
 
+  Future<void> _deleteAppointment(String documentId) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: const Text('Delete Appointment'),
+          content: const Text(
+            'Are you sure you want to delete this appointment?',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(dialogContext, false);
+              },
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.pop(dialogContext, true);
+              },
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirm != true) return;
+
+    try {
+      await _firestore.collection('appointments').doc(documentId).delete();
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Appointment deleted successfully!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Delete failed: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     const primaryColor = Color(0xFF7655D9);
@@ -76,13 +132,11 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
         backgroundColor: const Color(0xFFF8F7FC),
         elevation: 0,
       ),
-
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: _firestore
             .collection('appointments')
             .orderBy('createdAt', descending: true)
             .snapshots(),
-
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
@@ -96,7 +150,6 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
           }
 
           final firebaseAppointments = snapshot.data?.docs ?? [];
-
           final bool useLocal = firebaseAppointments.isEmpty;
 
           final int count = useLocal
@@ -160,9 +213,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                           size: 28,
                         ),
                       ),
-
                       const SizedBox(width: 12),
-
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -191,19 +242,31 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                           ],
                         ),
                       ),
-
                       Column(
                         children: [
                           const Icon(Icons.check_circle, color: Colors.green),
-                          if (documentId != null)
+                          if (documentId != null) ...[
                             TextButton.icon(
-                              onPressed: () => _editAppointment(documentId!),
+                              onPressed: () {
+                                _editAppointment(documentId!);
+                              },
                               icon: const Icon(Icons.edit, size: 16),
                               label: const Text('Edit'),
                               style: TextButton.styleFrom(
                                 foregroundColor: primaryColor,
                               ),
                             ),
+                            TextButton.icon(
+                              onPressed: () {
+                                _deleteAppointment(documentId!);
+                              },
+                              icon: const Icon(Icons.delete, size: 16),
+                              label: const Text('Delete'),
+                              style: TextButton.styleFrom(
+                                foregroundColor: Colors.red,
+                              ),
+                            ),
+                          ],
                         ],
                       ),
                     ],

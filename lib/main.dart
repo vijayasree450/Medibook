@@ -1,7 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+
 import 'firebase_options.dart';
-import 'screens/home_screen.dart';
+import 'screens/login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,7 +31,7 @@ class MediBookApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFFF8F7FC),
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF7655D9)),
       ),
-      home: const HomeScreen(),
+      home: const LoginScreen(),
     );
   }
 }
